@@ -1,9 +1,11 @@
+// server_test.js
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
 
-// middleware untuk parsing JSON
-app.use(express.json());
+// pasang protection patch — patch sudah mendaftarkan express.json({limit:...}) dan middleware lainnya
+require('./protection-patch.js')(app);
+
+const port = process.env.PORT || 3000;
 
 // root
 app.get('/', (req, res) => {
