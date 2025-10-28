@@ -1,0 +1,15 @@
+{
+  "name": "simpel_express_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "simple_express_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
