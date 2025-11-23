@@ -1,17 +1,20 @@
 config:
   target: "http://localhost:3000"
   phases:
-    - duration: 10
-      arrivalRate: 2
-  defaults:
-    headers:
-      Content-Type: "application/json"
+    - duration: 30        # test selama 30 detik
+      arrivalRate: 5      # 5 user per detik (ringan)
 scenarios:
-  - name: "mix GET + POST"
+  - name: "Test endpoint bebas"
     flow:
       - get:
           url: "/free"
-      - post:
-          url: "/echo"
-          json:
-            test: "artillery"
+
+  - name: "Test root"
+    flow:
+      - get:
+          url: "/"
+
+  - name: "Test greet"
+    flow:
+      - get:
+          url: "/greet?name=Saiful"

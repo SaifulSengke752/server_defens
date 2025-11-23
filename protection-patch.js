@@ -1,5 +1,5 @@
 // protection-patch.js
-const express = require('express'); // <- PENTING
+const express = require('express'); 
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
@@ -9,7 +9,12 @@ module.exports = function (app) {
   const RATE_MAX = 100;
   const SLOWDOWN_WINDOW_MS = 60 * 1000;
   const SLOWDOWN_DELAY_AFTER = 50;
-  const SLOWDOWN_DELAY_MS = 50;
+
+  // express-slow-down terbaru TIDAK menerima angka di delayMs
+  const SLOWDOWN_DELAY_MS = () => 50;
+
+  // Hilangkan warning dari express-slow-down
+  const VALIDATE_OPTIONS = { delayMs: false };
 
   // jika behind proxy
   app.set('trust proxy', true);
@@ -17,10 +22,10 @@ module.exports = function (app) {
   // security headers
   app.use(helmet());
 
-  // Batasi ukuran body JSON DI SINI (pastikan server_test.js TIDAK juga memanggil express.json())
+  // Batasi ukuran body JSON
   app.use(express.json({ limit: '100kb' }));
 
-  // hard rate limiter
+  // Hard rate limiter
   const limiter = rateLimit({
     windowMs: RATE_WINDOW_MS,
     max: RATE_MAX,
@@ -31,14 +36,15 @@ module.exports = function (app) {
     },
   });
 
-  // soft slowdown
+  // Soft slowdown — BAGIAN YANG DIPERBAIKI
   const speedLimiter = slowDown({
     windowMs: SLOWDOWN_WINDOW_MS,
     delayAfter: SLOWDOWN_DELAY_AFTER,
-    delayMs: SLOWDOWN_DELAY_MS,
+    delayMs: SLOWDOWN_DELAY_MS,   // ← bukan angka lagi
+    validate: VALIDATE_OPTIONS,   // ← hilangkan warning
   });
 
-  // terapkan (global) — ubah ke route-specific jika perlu
+  // terapkan global
   app.use(speedLimiter);
   app.use(limiter);
 

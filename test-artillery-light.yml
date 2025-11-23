@@ -1,0 +1,11 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 10
+      arrivalRate: 10   # 10 user per detik
+
+scenarios:
+  - name: Light Load Test
+    flow:
+      - get:
+          url: "/free"

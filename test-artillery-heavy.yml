@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 10
+      arrivalRate: 10      # mulai ringan
+    - duration: 20
+      arrivalRate: 50      # naik
+    - duration: 20
+      arrivalRate: 100     # lebih berat
+    - duration: 20
+      arrivalRate: 200     # puncak load
+
+scenarios:
+  - name: Heavy Ramp Stress Test
+    flow:
+      - get:
+          url: "/free"
+      - get:
+          url: "/greet"
+      - post:
+          url: "/echo"
+          json:
+            test: "stress"

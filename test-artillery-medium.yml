@@ -1,0 +1,15 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 20
+      arrivalRate: 50   # 50 user/dtk
+
+scenarios:
+  - name: Medium Stress Test
+    flow:
+      - get:
+          url: "/free"
+      - post:
+          url: "/echo"
+          json:
+            hello: "world"
